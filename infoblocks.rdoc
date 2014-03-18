@@ -1,0 +1,5 @@
+= infoblocks
+
+Generate this with
+    infoblocks rdoc
+After you have described your command line interface

@@ -1,0 +1,113 @@
+#!/usr/bin/env ruby
+require 'gli'
+require 'infoblocks'
+require 'infoblox'
+require 'pry'
+
+include GLI::App
+
+config_file '.infoblocks.rc'
+
+program_desc 'CLI interface for the Infoblox WAPI'
+
+version Infoblocks::VERSION
+sort_help :manually
+
+desc 'Username for Infoblox WAPI'
+arg_name '<username>'
+flag [:user,:u]
+
+desc 'Password for Infoblox WAPI'
+arg_name '<password>'
+flag [:pass,:p]
+
+desc 'Host or base URL for Infoblox WAPI'
+arg_name '<hostname>'
+flag [:host,:H]
+
+desc 'Manipulates host objects'
+command :host do |c|
+  c.flag [:view,:v], :desc => 'DNS View', :required => true
+  
+  c.desc 'Adds host object'
+  c.arg_name '<hostname> <ip_address>'
+  c.command :add do |subadd|
+    subadd.action do |global_options,options,args|
+      raise ArgumentError, "Invalid arguments" if args.length != 2
+
+      hostobj = Infoblox::Host.new({
+                  :connection => @connection,
+                  :name => args[0],
+                  :ipv4addrs => [{ :ipv4addr => args[1] }],
+                  :configure_for_dns => true,
+                  :view => options[:view]
+                })  
+      hostobj.post
+    end
+  end
+
+  c.desc 'Deletes host object'
+  c.arg_name '<hostname>'
+  c.command :del do |subdel|
+    subdel.action do |global_options,options,args|
+      raise ArgumentError, "Invalid arguments" if args.length != 1
+
+      hostarray = Infoblox::Host.find(@connection, {'name' => args[0], 'view' => options[:view]})
+      raise StandardError, "Multiple records found" if hostarray.length != 1
+
+      hostarray[0].delete
+    end
+  end
+  
+  c.desc 'Searches for hosts'
+  c.arg_name '<hostname>'
+  c.command :search do |subsearch|
+    subsearch.action do |global_options,options,args|
+      raise ArgumentError, "Invalid arguments" if args.length != 1
+
+      Infoblox::Host.find(@connection, {'name' => args[0], 'view' => options[:view]}).each do |host|
+        Infoblocks::Display.disp(host)
+      end
+    end
+  end
+end  
+
+desc 'Searches infoblox globally'
+arg_name '<search_string>'
+command :search do |c|
+  c.flag [:matchtype,:m], :desc => 'How to treat search string', :default_value => 'exact', :must_match => ['exact','loose','regex']
+  c.flag [:objtype,:o], :desc => 'Restricts search to specific object type'
+  c.action do |global_options,options,args|
+    raise ArgumentError, "Missing argument" if args.length != 1
+
+    searchmap = { 'exact' => '', 'loose' => ':', 'regex' => '~' }   # infoblox holdovers from the perl api
+    search_string = { "search_string#{searchmap[options[:matchtype]]}" => args[0] }
+    search_string.merge!({ 'objtype' => options[:objtype] }) unless options[:objtype].nil?
+
+    Infoblox::Search.find(@connection, search_string).each do |obj|
+      Infoblocks::Display.disp(obj)
+    end
+  end
+end
+
+pre do |global,command,options,args|
+  [:user,:pass,:host].each do |required|
+     raise ArgumentError, "Missing #{required} argument." unless global[required]
+  end
+  @connection = Infoblox::Connection.new(:username => global[:user], :password => global[:pass], :host => global[:host])
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)

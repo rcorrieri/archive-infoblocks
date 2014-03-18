@@ -1,0 +1,4 @@
+hostname: <%= @name %>
+<% @ipv4addrs.each do |ip| -%>
+ip: <%= ip.ipv4addr %>
+<% end -%> 

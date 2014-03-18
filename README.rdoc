@@ -1,0 +1,6 @@
+= infoblocks
+
+Command line interface to infoblox.
+
+:include:infoblocks.rdoc
+
