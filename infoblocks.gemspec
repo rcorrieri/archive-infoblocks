@@ -5,9 +5,11 @@ spec = Gem::Specification.new do |s|
   s.version = Infoblocks::VERSION
   s.author = 'Sam Rees'
   s.email = 'srees@enova.com'
-  s.homepage = 'http://www.enova.com'
+  s.homepage = 'https://github.com/samrees/infoblocks'
+  s.licenses = ['MIT']
   s.platform = Gem::Platform::RUBY
   s.summary = 'CLI Interface into Infoblox'
+  s.description = 'A frontend built in GLI that uses the Infoblox gem to make WAPI calls against any infoblox device.'
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
