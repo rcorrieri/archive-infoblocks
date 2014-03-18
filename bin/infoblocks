@@ -2,7 +2,6 @@
 require 'gli'
 require 'infoblocks'
 require 'infoblox'
-require 'pry'
 
 include GLI::App
 
