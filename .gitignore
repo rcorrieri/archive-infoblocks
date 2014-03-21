@@ -2,3 +2,5 @@ Gemfile.lock
 infoblocks.cfg
 results.html
 pkg
+test/toy.rb
+*.swp
