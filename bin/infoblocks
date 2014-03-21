@@ -18,7 +18,7 @@ flag [:user,:u]
 
 desc 'Password for Infoblox WAPI'
 arg_name '<password>'
-flag [:pass,:p]
+flag [:pass,:p], :mask => true
 
 desc 'Host or base URL for Infoblox WAPI'
 arg_name '<hostname>'
