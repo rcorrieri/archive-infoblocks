@@ -34,6 +34,7 @@ command :host do |c|
 
     subadd.switch [:dns], :desc => 'Enable DNS', :default_value => true, :negatable => true
     subadd.flag [:dhcpmac], :desc => 'Mac address to enable DHCP', :must_match => /^((\h{2}([:-]|$)){6})|(\h{12})$/
+    subadd.flag [:aliases,:a], :desc => 'CNAMES for host record', :type => Array
 
     subadd.action do |global_options,options,args|
       raise ArgumentError, "Invalid arguments" if args.length != 2
@@ -50,6 +51,7 @@ command :host do |c|
                   :name => args[0],
                   :ipv4addrs => [ipv4addr],
                   :configure_for_dns => options[:dns],
+                  :aliases => options[:aliases],
                   :view => options[:view]
                 })  
       hostobj.post
