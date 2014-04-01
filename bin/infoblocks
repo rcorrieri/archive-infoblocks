@@ -32,9 +32,9 @@ command :host do |c|
   c.arg_name '<hostname> <ip_address>'
   c.command :add do |subadd|
 
-    subadd.switch [:dns], :desc => 'Enable DNS', :default_value => true, :negatable => true
-    subadd.flag [:dhcpmac], :desc => 'Mac address to enable DHCP', :must_match => /^((\h{2}([:-]|$)){6})|(\h{12})$/
-    subadd.flag [:aliases,:a], :desc => 'CNAMES for host record', :type => Array
+    subadd.switch [:dns], :desc => 'Enables/Disables DNS for this record.', :default_value => true, :negatable => true
+    subadd.flag [:dhcpmac,:m], :desc => 'Mac address to enable DHCP.', :must_match => /^((\h{2}([:-]|$)){6})|(\h{12})$/
+    subadd.flag [:aliases,:a], :desc => 'List of CNAMES for this record.', :type => Array
 
     subadd.action do |global_options,options,args|
       raise ArgumentError, "Invalid arguments" if args.length != 2
