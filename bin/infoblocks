@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'gli'
-require 'highline'
+require 'highline/import'
 require 'infoblox'
 require 'infoblocks'
 
@@ -104,9 +104,10 @@ command :search do |c|
 end
 
 pre do |global,command,options,args|
-  [:user,:pass,:host].each do |required|
+  [:user,:host].each do |required|
      raise ArgumentError, "Missing #{required} argument." unless global[required]
   end
+  global[:pass] ||= ask("Password:") { |q| q.echo = false }
   @connection = Infoblox::Connection.new(:username => global[:user], :password => global[:pass], :host => global[:host])
   true
 end
