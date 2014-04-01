@@ -22,5 +22,5 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')
   s.add_runtime_dependency('gli','2.9.0')
-  s.add_runtime_dependency('infoblox','0.2.9')
+  s.add_runtime_dependency('infoblox','0.2.11')
 end
