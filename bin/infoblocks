@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 require 'gli'
-require 'infoblocks'
+require 'highline'
 require 'infoblox'
+require 'infoblocks'
 
 include GLI::App
 

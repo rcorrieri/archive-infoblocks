@@ -23,4 +23,5 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('aruba')
   s.add_runtime_dependency('gli','2.9.0')
   s.add_runtime_dependency('infoblox','0.2.11')
+  s.add_runtime_dependency('highline','1.6.21')
 end
