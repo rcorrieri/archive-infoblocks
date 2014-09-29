@@ -2,5 +2,5 @@
 
 Command line interface to infoblox.
 
-:include:infoblocks.rdoc
+Uncomplete, Unsupported.
 
